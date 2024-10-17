@@ -6,8 +6,8 @@
   "types": "./dist/src/index.d.ts",
   "scripts": {
     "install": "npm run install_build",
-    "postinstall": "node src/clean.js",
-    "install_build": "node-gyp rebuild && npx tsc --build ",
+    "postinstall": "",
+    "install_build": "",
     "build-dev": "node-gyp rebuild --debug"
   },
   "author": "xiaobaidadada",
