@@ -23,9 +23,14 @@
         "NAPI_VERSION=<(napi_build_version)",
         "NAPI_CPP_EXCEPTIONS"
       ],
-      "cflags_cc": [
-              "/EHsc"
-      ]
+       "conditions": [
+              [ 'OS=="win"', {
+                "cflags_cc": [ "/EHsc" ]
+              }],
+              [ 'OS!="win"', {
+                "cflags_cc": [ "-fexceptions" ]
+              }]
+       ]
     }
   ]
 }
