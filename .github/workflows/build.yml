@@ -48,10 +48,10 @@ jobs:
       fail-fast: false
       matrix:
         os:
-          - ubuntu-20.04
-          #- macos-13
-          #- macos-14
-          - windows-2022
+          #- ubuntu-20.04
+          - macos-13
+          - macos-14
+          #- windows-2022
     name: Prebuild on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     # needs: test
