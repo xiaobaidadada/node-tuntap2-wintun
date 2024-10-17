@@ -7,7 +7,7 @@
   "scripts": {
     "install": "prebuild-install --verbose || npm run install_build",
     "postinstall": "node src/clean.js",
-    "install_build": "node-gyp rebuild && npx tsc --build ",
+    "install_build": "npm install node-addon-api node-gyp --save-dev && node-gyp rebuild --release && npx tsc --build ",
     "build-dev": "node-gyp rebuild --debug"
   },
   "author": "xiaobaidadada",
@@ -30,15 +30,15 @@
   "dependencies": {
     "bindings": "^1.5.0",
     "jmespath": "^0.16.0",
-    "node-addon-api": "^7.1.1",
     "prebuild-install": "^7.1.2"
   },
   "devDependencies": {
     "@types/jmespath": "^0.15.0",
     "@types/node": "^17.0.8",
-    "typescript": "^4.5.4",
-    "ts-node": "^10.9.2",
+    "node-addon-api": "^7.1.1",
     "node-gyp": "^10.2.0",
-    "prebuild": "^13.0.1"
+    "prebuild": "^13.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^4.5.4"
   }
 }
