@@ -5,9 +5,9 @@
   "main": "./dist/index.js",
   "types": "./dist/src/index.d.ts",
   "scripts": {
-    "install": "npm run install_build",
-    "postinstall": "",
-    "install_build": "",
+    "install": "prebuild-install --verbose || npm run install_build",
+    "postinstall": "node src/clean.js",
+    "install_build": "node-gyp rebuild && npx tsc --build ",
     "build-dev": "node-gyp rebuild --debug"
   },
   "author": "xiaobaidadada",
@@ -37,14 +37,11 @@
   ],
   "dependencies": {
     "bindings": "^1.5.0",
-    "jmespath": "^0.16.0",
     "prebuild-install": "^7.1.2"
   },
   "devDependencies": {
-    "@types/node": "^17.0.8",
-    "typescript": "^4.5.4",
+    "mocha": "^10.7.3",
     "node-addon-api": "^7.1.1",
-    "ts-node": "^10.9.2",
     "node-gyp": "^10.2.0",
     "prebuild": "^13.0.1"
   }
