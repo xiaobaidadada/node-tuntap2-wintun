@@ -1,5 +1,5 @@
 {
-  "name": "@xiaobaidadada/node-tuntap2",
+  "name": "@xiaobaidadada/node-tuntap2-wintun",
   "version": "1.0.0",
   "description": " create tun in linux or windows ",
   "main": "./dist/index.js",
