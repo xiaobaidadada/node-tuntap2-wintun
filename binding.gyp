@@ -14,23 +14,30 @@
         '--std=c++17',
         '-Wno-stringop-truncation'
       ],
-      "include_dirs": [
-        "<!(node -p \"require('node-addon-api').include_dir\")"
-      ],
-      "libraries":[],
-      "defines": [
-        "NODE_ADDON_API_DISABLE_DEPRECATED",
-        "NAPI_VERSION=<(napi_build_version)",
-        "NAPI_CPP_EXCEPTIONS"
-      ],
-       "conditions": [
-              [ 'OS=="win"', {
-                "cflags_cc": [ "/EHsc" ]
+      'cflags!': [ '-fno-exceptions' ],
+            'cflags_cc!': [ '-fno-exceptions' ],
+            'include_dirs': [
+              "<!@(node -p \"require('node-addon-api').include\")"
+            ],
+            'dependencies': [
+                "<!(node -p \"require('node-addon-api').gyp\")"
+            ],
+            'conditions': [
+              ['OS=="win"', {
+                "msvs_settings": {
+                  "VCCLCompilerTool": {
+                    "ExceptionHandling": 1
+                  }
+                }
               }],
-              [ 'OS!="win"', {
-                "cflags_cc": [ "-fexceptions" ]
+              ['OS=="mac"', {
+                "xcode_settings": {
+                  "CLANG_CXX_LIBRARY": "libc++",
+                  'GCC_ENABLE_CPP_EXCEPTIONS': 'YES',
+                  #'MACOSX_DEPLOYMENT_TARGET': '10.7'
+                }
               }]
-       ]
+            ]
     }
   ]
 }

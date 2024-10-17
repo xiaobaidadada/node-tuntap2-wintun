@@ -81,7 +81,7 @@ void receivePacket(WINTUN_SESSION_HANDLE session ,Napi::Env env,Napi::ThreadSafe
                 if (Packet) {
                     tsfn.BlockingCall([Packet,PacketSize](Napi::Env env, Napi::Function jsCallback) {
                         // 但是这里是可以使用 env的
-                        Napi::HandleScope scope(Napi::Env);
+                        Napi::HandleScope scope(env);
                         // 创建 Buffer 对象
                         // 创建 Napi::Buffer 对象，传入数据指针和长度
                         Napi::Buffer<byte> buffer = Napi::Buffer<byte>::New(env, reinterpret_cast<byte*>(Packet), PacketSize);
