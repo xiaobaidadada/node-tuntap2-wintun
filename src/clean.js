@@ -20,6 +20,11 @@ switch (cpuArch) {
 const p = path.join(__dirname, "..","wintun_dll")
 const file_list = fs.readdirSync(p);
 for (const file of file_list) {
+    if (process.platform === 'win32') {
+        const fullPath = path.join(__dirname, "..","wintun_dll", file);
+        fs.unlinkSync(fullPath);
+        continue;
+    }
     if (!file.includes(cpuArch)) {
         const fullPath = path.join(__dirname, "..","wintun_dll", file);
         fs.unlinkSync(fullPath);

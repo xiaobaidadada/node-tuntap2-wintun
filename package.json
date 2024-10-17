@@ -6,7 +6,8 @@
   "types": "./dist/src/index.d.ts",
   "scripts": {
     "install": "prebuild-install --verbose || npm run build",
-    "build": "node-gyp rebuild && npx tsc --build && node src/clean.js",
+    "postinstall": "node src/clean.js",
+    "build": "node-gyp rebuild && npx tsc --build ",
     "build:dev": "node-gyp rebuild --debug"
   },
   "author": "xiaobaidadada",
@@ -34,7 +35,6 @@
     "tsconfig.json",
     "wintun_dll/*"
   ],
-  "gypfile": true,
   "dependencies": {
     "bindings": "^1.5.0",
     "jmespath": "^0.16.0",
