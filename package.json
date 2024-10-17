@@ -27,14 +27,6 @@
     "windows",
     "win"
   ],
-  "files": [
-    "dist/*",
-    "src/*",
-    "index.ts",
-    "binding.gyp",
-    "tsconfig.json",
-    "wintun_dll/*"
-  ],
   "dependencies": {
     "bindings": "^1.5.0",
     "jmespath": "^0.16.0",
