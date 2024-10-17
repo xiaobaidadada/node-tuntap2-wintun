@@ -7,4 +7,5 @@ index.json
 cmake-build-debug
 node_modules
 dist
-/.idea
+/package-lock.json
+/.idea/
