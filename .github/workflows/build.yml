@@ -49,7 +49,7 @@ jobs:
       matrix:
         os:
           - ubuntu-20.04
-          - macos-13
+          #- macos-13
           #- macos-14
           - windows-2022
     name: Prebuild on ${{ matrix.os }}
