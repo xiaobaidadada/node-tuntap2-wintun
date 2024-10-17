@@ -16,6 +16,7 @@
     "type": "git",
     "url": "https://github.com/xiaobaidadada/node-tuntap2-wintun.git"
   },
+  "private": false,
   "keywords": [
     "tunnel",
     "tun",
