@@ -13,7 +13,7 @@ a opensource, asynchronized, napi-based, business friendly tuntap device driver 
 ## TL; DR
 
 ```javascript
-const {Tun, Tap} = require('tuntap2');
+const {Tun, Tap} = require('@xiaobaidadada/node-tuntap2-wintun');
 
 try {
     const tun = new Tun();
@@ -35,7 +35,7 @@ catch(e) {
 ```
 ```js
 // widnwos 
-const {Wintun} = require("tuntap2")
+const {Wintun} = require("@xiaobaidadada/node-tuntap2-wintun")
 
 const p2 = Wintun.get_wintun_dll_path();
 Wintun.wintunSetPath(p2);

@@ -1,6 +1,6 @@
 {
   "name": "@xiaobaidadada/node-tuntap2-wintun",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": " create tun in linux or windows ",
   "main": "./dist/index.js",
   "types": "./dist/src/index.d.ts",
