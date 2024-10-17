@@ -67,7 +67,7 @@ Wintun.wintunUpOn((buf)=>{
 npm i @xiaobaidadada/node-tuntap2
 ```
 
-**Note:** 本项目使用了预构建，建议使用Node18，不需要编译而是从github下载编译好的文件，如果你电脑上的网络安装的时候无法访问github则会退化成编译。在windows上编译可能遇到的问题可以参考这个链接https://blog.csdn.net/jjocwc/article/details/134152602
+**Note:** 目前仅支持linux和windows ；本项目使用了预构建，建议使用Node18，不需要编译而是从github下载编译好的文件，如果你电脑上的网络安装的时候无法访问github则会退化成编译。在windows上编译可能遇到的问题可以参考这个链接https://blog.csdn.net/jjocwc/article/details/134152602
 
 **Note:** Reading properties requires your interface in `up` status.
 
