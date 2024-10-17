@@ -22,6 +22,9 @@
         "NODE_ADDON_API_DISABLE_DEPRECATED",
         "NAPI_VERSION=<(napi_build_version)",
         "NAPI_CPP_EXCEPTIONS"
+      ],
+      "cflags_cc": [
+              "/EHsc"
       ]
     }
   ]

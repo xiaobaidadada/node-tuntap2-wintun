@@ -38,6 +38,8 @@ int close(WINTUN_ADAPTER_HANDLE adapter,WINTUN_SESSION_HANDLE Session,HMODULE Wi
 void receivePacket(WINTUN_SESSION_HANDLE session,Napi::Env env,Napi::ThreadSafeFunction tsfn);
 
 #else
+#include <netinet/ether.h>
+#include <netinet/if_ether.h>
 // linux 的api部分
 // 初始化适配器文件(修改)
 int init(int fd, bool isTap, char* name);

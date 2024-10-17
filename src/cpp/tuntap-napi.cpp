@@ -130,10 +130,6 @@ static Napi::Object Init(Napi::Env env, Napi::Object exports) {
 NODE_API_MODULE(tuntap2Addon, Init)
 // Windows 特定代码
 #else
-#include <netinet/ether.h>
-#include <netinet/if_ether.h>
-
-
 
 static Napi::Value tuntapInit(const Napi::CallbackInfo& info) {
     const Napi::Env& env = info.Env();
