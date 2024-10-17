@@ -5,7 +5,7 @@
   "main": "./dist/index.js",
   "types": "./dist/src/index.d.ts",
   "scripts": {
-    "install": "prebuild-install --verbose || npm run install_build",
+    "install": "npm run install_build",
     "postinstall": "node src/clean.js",
     "install_build": "node-gyp rebuild && npx tsc --build ",
     "build-dev": "node-gyp rebuild --debug"
