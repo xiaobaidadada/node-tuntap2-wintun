@@ -1,3 +1,6 @@
+import * as path from "node:path";
+import * as os from 'os';
+
 export interface tuntap2AddonTypes {
     /**
      * set up the file descriptor to be as an tun/tap device.
@@ -68,5 +71,7 @@ export interface tuntap2AddonTypes {
      */
     tuntapSetIpv6: (ifIndex: number, ipStr: string, prefix: number) => number;
 }
-const tuntap2Addon: tuntap2AddonTypes = require("../../../build/Release/tuntap2Addon");
-export default tuntap2Addon;
+
+
+const Tuntap2Addon: tuntap2AddonTypes = os.platform() !== 'win32'?require("../../../../build/Release/tuntap2Addon"):undefined;
+export default Tuntap2Addon;

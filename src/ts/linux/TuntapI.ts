@@ -2,6 +2,7 @@ import { Duplex} from "stream";
 
 /**
  * basic tuntap interface
+ * Duplex 可读可写流
  */
  export interface TuntapI extends Duplex {
     /**
@@ -11,6 +12,7 @@ import { Duplex} from "stream";
      * @memberof TuntapI
      * @since 0.0.1
      */
+    
     readonly name: string;
     /**
      * returns `true` if this is a Tap device

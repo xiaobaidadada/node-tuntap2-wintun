@@ -10,7 +10,8 @@
       "types": ["node"],
       "typeRoots": ["./node_modules/@types"],
       "outDir": "./dist",
-      "declaration": true
+      "declaration": true,
+      "skipLibCheck": true
     },
     "include": ["index.ts","src/ts/*"],
     "exclude": ["node_modules", "**/*.spec.ts", "./dist/*","./build/*"],

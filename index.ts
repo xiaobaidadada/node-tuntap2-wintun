@@ -1,19 +1,20 @@
 
-import {Tuntap} from './src/ts/Tuntap'
+import {Tuntap} from './src/ts/linux/Tuntap'
+import WintunAddon from "./src/ts/win/WintunAddon";
 // this file only contains wrapper class for tuntap class.
 /**
  * Tun interface, a Layer 2 virtual interface.
- * @class Tun
+ * @class LinuxTun
  * @extends {TuntapB}
  */
- class Tun extends Tuntap {
+ class LinuxTun extends Tuntap {
     constructor() {
         super('tun');
     }
     /**
      * setting the mac of a Tun interface is illegal as tun devices is running on layer 3
      * @throws 'method not support by a tun device.'
-     * @memberof Tun
+     * @memberof LinuxTun
      * @since 0.1.0
      */
     set mac(mac:string){
@@ -24,38 +25,17 @@ import {Tuntap} from './src/ts/Tuntap'
 /**
  * Tap interface, a Layer 2 virtual interface.
  * The tap device allows 
- * @class Tap
+ * @class LinuxTap
  * @extends {TuntapB}
  */
- class Tap extends Tuntap {
+ class LinuxTap extends Tuntap {
     constructor() {
         super('tap');
     }
 }
 
-/**
- * a compatibility Wrapper for module `node-tuntap`
- *
- * @example
- * ```js
- *  try {
-        var tt = tuntap({
-            type: 'tun', // 'tun' or 'tap'
-            mtu: 1500,
-            addr: '192.168.123.1',
-            mask: '255.255.255.192',
-            up: true,
-            //name is unacceptable
-            //dest,persist,ethtype_comp,running is not used
-        });
-    } catch(e) {
-        console.log('Tuntap creation error: ', e);
-        process.exit(0);
-    }
-    tt.pipe(tt);
- * ```
- */
-const tuntap = function(options: any){
+
+const LinuxTunTap = function(options: any){
     if(options.name){
         throw `setting a name of a tuntap device is not supported`
     }
@@ -100,4 +80,7 @@ const tuntap = function(options: any){
     }
     return device;
 }
-export {Tap, Tun, tuntap};
+
+const Wintun = WintunAddon ;
+
+export {LinuxTap, LinuxTun, LinuxTunTap,Wintun};

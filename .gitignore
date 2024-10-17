@@ -4,5 +4,7 @@ index.json
 .nyc_output
 /coverage
 .vscode
-/dist/*
-/.idea/
+cmake-build-debug
+node_modules
+dist
+/.idea
