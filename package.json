@@ -6,7 +6,7 @@
   "types": "./dist/src/index.d.ts",
   "scripts": {
     "install": "prebuild-install --verbose || npm run install_build",
-    "postinstall": "node src/clean.js",
+    "postinstall": " npx tsc --build && node src/clean.js ",
     "install_build": "npm install node-addon-api node-gyp --save-dev && node-gyp rebuild --release && npx tsc --build ",
     "build-dev": "node-gyp rebuild --debug"
   },
