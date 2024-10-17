@@ -2,16 +2,16 @@
 #include "tuntap-methods.h"
 
 
-[[noreturn]] static void throwErrnoError(Napi::Env env, int code) {
-
-    napi_value error;
-    napi_create_error(env, Napi::Value::From(env, uv_err_name(-code)),
-                      Napi::Value::From(env, uv_strerror(-code)), &error);
-
-    Napi::Error err(env, error);
-    err.Set("errno", Napi::Value::From(env, code));
-    throw err;
-}
+// [[noreturn]] static void throwErrnoError(Napi::Env env, int code) {
+//
+//     napi_value error;
+//     napi_create_error(env, Napi::Value::From(env, uv_err_name(-code)),
+//                       Napi::Value::From(env, uv_strerror(-code)), &error);
+//
+//     Napi::Error err(env, error);
+//     err.Set("errno", Napi::Value::From(env, code));
+//     throw err;
+// }
 
 
 #ifdef _WIN32
@@ -35,7 +35,7 @@ static Napi::Value wintunInit(const Napi::CallbackInfo& info) {
     const Napi::Env& env = info.Env();
     Wintun = initAnGetWintun();
     if (!Wintun) {
-        throwErrnoError(env, errno);
+//         throwErrnoError(env, errno);
     }
     // 将句柄转换为整数类型并返回给 JavaScript
 //     Napi::Buffer<byte> buffer = Napi::Buffer<byte>::New(env, reinterpret_cast<byte*>(Wintun), sizeof Wintun);
@@ -129,7 +129,7 @@ static Napi::Object Init(Napi::Env env, Napi::Object exports) {
 
 NODE_API_MODULE(tuntap2Addon, Init)
 // Windows 特定代码
-#elif defined(__linux__)
+#else
 #include <netinet/ether.h>
 #include <netinet/if_ether.h>
 
@@ -147,7 +147,7 @@ static Napi::Value tuntapInit(const Napi::CallbackInfo& info) {
     int result = init(info[0].As<Napi::Number>().Int32Value(),
                       info[1].As<Napi::Boolean>().Value(), name);
     if (result == -1) {
-        throwErrnoError(env, errno);
+//         throwErrnoError(env, errno);
     }
     return Napi::String::From(env, name);
 };
@@ -163,7 +163,7 @@ static Napi::Value tuntapGetFlags(const Napi::CallbackInfo& info) {
     std::string name = info[0].As<Napi::String>().ToString();
     int result = getFlags((char*)name.data(), &flag);
     if (result == -1) {
-        throwErrnoError(env, errno);
+//         throwErrnoError(env, errno);
     }
     return Napi::Number::From(env, flag);
 }
@@ -179,7 +179,7 @@ static Napi::Value tuntapSetMac(const Napi::CallbackInfo& info) {
     std::string mac = info[1].As<Napi::String>().ToString();
     int result = setMac((char*)name.data(), (char*)mac.data());
     if (result == -1) {
-        throwErrnoError(env, errno);
+//         throwErrnoError(env, errno);
     }
     return Napi::Number::From(env, result);
 }
@@ -194,7 +194,7 @@ static Napi::Value tuntapSetUp(const Napi::CallbackInfo& info) {
     std::string name = info[0].As<Napi::String>().ToString();
     int result = setUp((char*)name.data());
     if (result == -1) {
-        throwErrnoError(env, errno);
+//         throwErrnoError(env, errno);
     }
     return Napi::Number::From(env, result);
 }
@@ -209,7 +209,7 @@ static Napi::Value tuntapSetDown(const Napi::CallbackInfo& info) {
     std::string name = info[0].As<Napi::String>().ToString();
     int result = setDown((char*)name.data());
     if (result == -1) {
-        throwErrnoError(env, errno);
+//         throwErrnoError(env, errno);
     }
     return Napi::Number::From(env, result);
 }
@@ -225,7 +225,7 @@ static Napi::Value tuntapSetMtu(const Napi::CallbackInfo& info) {
     int result =
         setMtu((char*)name.data(), info[1].As<Napi::Number>().Int32Value());
     if (result == -1) {
-        throwErrnoError(env, errno);
+//         throwErrnoError(env, errno);
     }
     return Napi::Number::From(env, result);
 }
@@ -241,7 +241,7 @@ static Napi::Value tuntapGetMtu(const Napi::CallbackInfo& info) {
     int mtu = 0;
     int result = getMtu((char*)name.data(), &mtu);
     if (result == -1) {
-        throwErrnoError(env, errno);
+//         throwErrnoError(env, errno);
     }
     return Napi::Number::From(env, mtu);
 }
@@ -259,7 +259,7 @@ static Napi::Value tuntapSetIpv4(const Napi::CallbackInfo& info) {
     int result = setIpv4Addr((char*)name.data(), (char*)ip.data());
     if ((setIpv4Addr((char*)name.data(), (char*)ip.data()) == -1) ||
         (setIpv4Netmask((char*)name.data(), mask) == -1)) {
-        throwErrnoError(env, errno);
+//         throwErrnoError(env, errno);
     }
     return Napi::Number::From(env, result);
 }
@@ -275,7 +275,7 @@ static Napi::Value tuntapGetIfIndex(const Napi::CallbackInfo& info) {
     int ifindex = 0;
     int result = getIfIndex((char*)name.data(), &ifindex);
     if (result == -1) {
-        throwErrnoError(env, errno);
+//         throwErrnoError(env, errno);
     }
     return Napi::Number::From(env, ifindex);
 }
@@ -293,7 +293,7 @@ static Napi::Value tuntapSetIpv6(const Napi::CallbackInfo& info) {
         setIpv6(info[0].As<Napi::Number>().Int32Value(), (char*)ip.data(),
                 info[2].As<Napi::Number>().Int32Value());
     if (result == -1) {
-        throwErrnoError(env, errno);
+//         throwErrnoError(env, errno);
     }
     return Napi::Number::From(env, result);
 }
