@@ -75,5 +75,7 @@ function get_wintun_dll_path():string {
 
 
 const WintunAddon: WintunAddonTypes = os.platform() === 'win32' ? require("../../../../build/Release/tuntap2Addon"):undefined;
-WintunAddon.get_wintun_dll_path = get_wintun_dll_path;
+if (WintunAddon) {
+    WintunAddon.get_wintun_dll_path = get_wintun_dll_path;
+}
 export default WintunAddon;

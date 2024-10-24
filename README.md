@@ -9,7 +9,8 @@ a opensource, asynchronized, napi-based, business friendly tuntap device driver 
 
 [![Package quality](https://packagequality.com/shield/tuntap2.svg)](https://packagequality.com/#?package=tuntap2)
 
-
+## install
+`npm install @xiaobaidadada/node-tuntap2-wintun`
 ## TL; DR
 
 ```javascript
