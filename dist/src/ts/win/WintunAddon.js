@@ -22,6 +22,8 @@ function get_wintun_dll_path() {
     return path.join(__dirname, "../../../../wintun_dll", winfilename);
 }
 const WintunAddon = os.platform() === 'win32' ? require("../../../../build/Release/tuntap2Addon") : undefined;
-WintunAddon.get_wintun_dll_path = get_wintun_dll_path;
+if (WintunAddon) {
+    WintunAddon.get_wintun_dll_path = get_wintun_dll_path;
+}
 exports.default = WintunAddon;
 //# sourceMappingURL=WintunAddon.js.map
