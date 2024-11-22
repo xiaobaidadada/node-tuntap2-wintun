@@ -93,7 +93,7 @@ jobs:
     #needs: test
     steps:
       - uses: actions/checkout@v4
-      - run: apk add build-base git python3 py3-setuptools --update-cache
+      - run: apk add build-base linux-headers git python3 py3-setuptools --update-cache
       - run: npm install --ignore-scripts
       - run: ${{ env.NODE_BUILD_CMD }} -u ${{ secrets.GITHUB_TOKEN }}
 
