@@ -31,7 +31,7 @@ env: # 用来定义环境变量 可用于工作流中所有作业的步骤的变
 # 所有的jobs下的任务都会被执行
 jobs:
   publish-npm:
-    if: ${{ github.event.inputs.job == 'push-npm'   || github.event.inputs.job == 'run-all'}}
+    if: ${{ github.event.inputs.job == 'push-npm'   || github.event.inputs.job == 'all'}}
     name: Publishing to NPM
     runs-on: ${{inputs.ubuntu_version}}
     steps:
