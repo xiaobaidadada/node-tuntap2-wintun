@@ -30,6 +30,26 @@ wchar_t* charToWchar(const char* input) {
     return output;
 }
 
+bool IsRunningAsAdmin() {
+    BOOL isAdmin = FALSE;
+    PSID adminGroup = NULL;
+
+    // 创建管理员组 SID
+    SID_IDENTIFIER_AUTHORITY NtAuthority = SECURITY_NT_AUTHORITY;
+    if (AllocateAndInitializeSid(
+        &NtAuthority, 2,
+        SECURITY_BUILTIN_DOMAIN_RID,
+        DOMAIN_ALIAS_RID_ADMINS,
+        0, 0, 0, 0, 0, 0,
+        &adminGroup))
+    {
+        // 检查当前进程是否属于管理员组
+        CheckTokenMembership(NULL, adminGroup, &isAdmin);
+        FreeSid(adminGroup);
+    }
+
+    return isAdmin == TRUE;
+}
 
 static Napi::Value wintunInit(const Napi::CallbackInfo& info) {
     const Napi::Env& env = info.Env();
@@ -44,6 +64,12 @@ static Napi::Value wintunInit(const Napi::CallbackInfo& info) {
 };
 static Napi::Value wintunSetIpv4(const Napi::CallbackInfo& info) {
     const Napi::Env& env = info.Env();
+    if (!IsRunningAsAdmin())
+    {
+        // 抛出异常
+        Napi::Error::New(env, "not admin").ThrowAsJavaScriptException();
+        return env.Null(); 
+    }
     std::string name = info[0].As<Napi::String>().ToString();
     std::string ip = info[1].As<Napi::String>().ToString();
     int mask = info[2].As<Napi::Number>().Int32Value();
