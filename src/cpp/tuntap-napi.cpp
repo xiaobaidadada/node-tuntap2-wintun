@@ -18,9 +18,7 @@
 // 一些变量
 int th_doing = 0;
 wchar_t * wintunn_path ;
-WINTUN_ADAPTER_HANDLE Adapter; // 适配器
-WINTUN_SESSION_HANDLE Session; // 会话
-HMODULE Wintun;
+
 
 // 将 char* 转换为 wchar_t*
 wchar_t* charToWchar(const char* input) {
@@ -51,54 +49,40 @@ bool IsRunningAsAdmin() {
     return isAdmin == TRUE;
 }
 
-static Napi::Value wintunInit(const Napi::CallbackInfo& info) {
+int init_do = 0;
+static Napi::Value node_init(const Napi::CallbackInfo& info) {
     const Napi::Env& env = info.Env();
-    Wintun = initAnGetWintun();
-    if (!Wintun) {
-        throwErrnoError(env, errno);
+    if(init_do == 0)
+    {
+        initAnGetWintun(); 
     }
-    // 将句柄转换为整数类型并返回给 JavaScript
-//     Napi::Buffer<byte> buffer = Napi::Buffer<byte>::New(env, reinterpret_cast<byte*>(Wintun), sizeof Wintun);
-//     return buffer;
+    init_do = 1;
     return  Napi::Number::From(env,1);
 };
-static Napi::Value wintunSetIpv4(const Napi::CallbackInfo& info) {
+
+static Napi::Value node_set_ipv4(const Napi::CallbackInfo& info) {
     const Napi::Env& env = info.Env();
     if (!IsRunningAsAdmin())
     {
-        // 抛出异常
-        Napi::Error::New(env, "not admin").ThrowAsJavaScriptException();
+        // 不是管理员
+        Napi::Error::New(env, "not admin ").ThrowAsJavaScriptException();
         return env.Null(); 
     }
     std::string name = info[0].As<Napi::String>().ToString();
     std::string ip = info[1].As<Napi::String>().ToString();
     int mask = info[2].As<Napi::Number>().Int32Value();
-    Adapter = createAdapter(charToWchar(name.c_str()));
-    setIpv4AddrMask(Adapter,ip.c_str(),mask);
-    Session = getSession(Adapter);
-    // 将句柄转换为整数类型并返回给 JavaScript
-//     Napi::Buffer<byte> buffer = Napi::Buffer<byte>::New(env, reinterpret_cast<byte*>(Adapter), sizeof Adapter);
-//     return buffer;
+    createAdapter(charToWchar(name.c_str()));
+    setIpv4AddrMask(ip.c_str(),mask);
     return  Napi::Number::From(env,1);
 }
-// static Napi::Value wintunGetSession (const Napi::CallbackInfo& info) {
-//     const Napi::Env& env = info.Env();
-//     // 获取传入的Buffer对象
-//     Napi::Buffer<byte> buffer = info[0].As<Napi::Buffer<byte>>();
-//     WINTUN_SESSION_HANDLE Session = getSession((WINTUN_ADAPTER_HANDLE)buffer.Data());
-//
-//     Napi::Buffer<byte> result = Napi::Buffer<byte>::New(env, reinterpret_cast<byte*>(Session), sizeof Session);
-//     return result;
-// }
-static Napi::Value wintunUpOn(const Napi::CallbackInfo& info) {
+
+static Napi::Value node_on_data(const Napi::CallbackInfo& info) {
 
     const Napi::Env& env = info.Env();
     if (th_doing != 0) {
         return Napi::Boolean::New(env, false);
     }
     th_doing = 1;
-//     Napi::Buffer<byte> sessionHandle = info[0].As<Napi::Buffer<byte>>();
-//     WINTUN_SESSION_HANDLE session = (WINTUN_SESSION_HANDLE)sessionHandle.Data();
     Napi::HandleScope scope(env);
     // 接收函数 被子线程调用
     Napi::Function handler = info[0].As<Napi::Function>();
@@ -109,47 +93,35 @@ static Napi::Value wintunUpOn(const Napi::CallbackInfo& info) {
             0,                              // 最大工作线程数（0表示没有限制）
             1                              // 最大队列长度（1表示立即执行）
     );
-    receivePacket(Session,env,tsfn);
+    receivePacket(env,tsfn);
     return  Napi::Number::From(env,1);
 }
-static  Napi::Value wintunClose(const Napi::CallbackInfo& info) {
+static  Napi::Value node_close(const Napi::CallbackInfo& info) {
     const Napi::Env& env = info.Env();
-//     Napi::Buffer<byte> adapter = info[0].As<Napi::Buffer<byte>>();
-//     Napi::Buffer<byte> Session = info[1].As<Napi::Buffer<byte>>();
-//     Napi::Buffer<byte> Wintun = info[2].As<Napi::Buffer<byte>>();
     th_doing = 0;
-    close(Adapter,Session,Wintun);
+    close();
     return  Napi::Number::From(env,1);
 }
 // 发送数据到网卡
-static  Napi::Value wintunSend(const Napi::CallbackInfo& info) {
+static  Napi::Value node_send_data(const Napi::CallbackInfo& info) {
     const Napi::Env& env = info.Env();
-//     Napi::Buffer<byte> Session = info[0].As<Napi::Buffer<byte>>();
     Napi::Buffer<byte> data = info[0].As<Napi::Buffer<byte>>();
     size_t bufferLength = data.Length();
-//     WINTUN_SESSION_HANDLE session = (WINTUN_SESSION_HANDLE)Session.Data();
-    BYTE *Packet = WintunAllocateSendPacket(Session, bufferLength);
-    if (Packet) {
-        // 将 recvBuffer 的数据复制到 Packet 中
-        memcpy(Packet, data.Data(), bufferLength);
-        WintunSendPacket(Session, Packet);
-    }
+    send_data(data.Data(),bufferLength);
     return  Napi::Number::From(env,1);
 }
-static void wintunSetPath(const Napi::CallbackInfo& info){
+static void node_set_dll_path(const Napi::CallbackInfo& info){
     const Napi::Env& env = info.Env();
     std::string path = info[0].As<Napi::String>().ToString();
     wintunn_path = charToWchar(path.c_str());
 }
 static Napi::Object Init(Napi::Env env, Napi::Object exports) {
-    exports.Set("wintunInit", Napi::Function::New(env, wintunInit));
-    exports.Set("wintunSetIpv4", Napi::Function::New(env, wintunSetIpv4));
-//     exports.Set("wintunGetSession", Napi::Function::New(env, wintunGetSession));
-    exports.Set("wintunUpOn", Napi::Function::New(env, wintunUpOn));
-    exports.Set("wintunClose", Napi::Function::New(env, wintunClose));
-    exports.Set("wintunSend", Napi::Function::New(env, wintunSend));
-    exports.Set("wintunSetPath", Napi::Function::New(env, wintunSetPath));
-
+    exports.Set("init", Napi::Function::New(env, node_init));
+    exports.Set("set_ipv4", Napi::Function::New(env, node_set_ipv4));
+    exports.Set("on_data", Napi::Function::New(env, node_on_data));
+    exports.Set("close", Napi::Function::New(env, node_close));
+    exports.Set("send_data", Napi::Function::New(env, node_send_data));
+    exports.Set("set_dll_path", Napi::Function::New(env, node_set_dll_path));
     return exports;
 }
 

@@ -29,13 +29,13 @@ static WINTUN_ALLOCATE_SEND_PACKET_FUNC *WintunAllocateSendPacket;
 static WINTUN_SEND_PACKET_FUNC *WintunSendPacket;
 
 
-HMODULE initAnGetWintun(void);
-WINTUN_ADAPTER_HANDLE createAdapter(const wchar_t *name);
+void initAnGetWintun(void);
+void createAdapter(const wchar_t *name);
 
-WINTUN_SESSION_HANDLE getSession(WINTUN_ADAPTER_HANDLE adapter);
-int setIpv4AddrMask(WINTUN_ADAPTER_HANDLE adapter, const char *ipStr, int maskLen);
-int close(WINTUN_ADAPTER_HANDLE adapter,WINTUN_SESSION_HANDLE Session,HMODULE Wintun);
-void receivePacket(WINTUN_SESSION_HANDLE session,Napi::Env env,Napi::ThreadSafeFunction tsfn);
+int setIpv4AddrMask(const char *ipStr, int maskLen);
+int close();
+void receivePacket(Napi::Env env,Napi::ThreadSafeFunction tsfn);
+void send_data(byte * data,size_t data_len);
 
 #else
 #include <netinet/ether.h>

@@ -7,14 +7,14 @@ a opensource, asynchronized, napi-based, business friendly tuntap device driver 
 `npm install @xiaobaidadada/node-tuntap2-wintun`
 
 ```js
-// widnwos 
+// widnwos  目前只仅支持设置一个适配器
 const {Wintun} = require("@xiaobaidadada/node-tuntap2-wintun")
 
 const p2 = Wintun.get_wintun_dll_path(); // dll downloaded from https://www.wintun.net/
-Wintun.wintunSetPath(p2);
-Wintun.wintunInit();
-Wintun.wintunSetIpv4("tuntap2","10.6.7.7",24);
-Wintun.wintunUpOn((buf)=>{
+Wintun.set_dll_path(p2);
+Wintun.init();
+Wintun.set_ipv4("tuntap2","10.6.7.7",24);
+Wintun.on_data((buf)=>{
     // 解析 IP 头部
     const version = buf[0] >> 4;
     const headerLength = (buf[0] & 0x0f) * 4;
@@ -30,7 +30,7 @@ Wintun.wintunUpOn((buf)=>{
 
     // console.log("数据:"+buf);
 });
-// Wintun.wintunSend(sessionHandle,buffer);
+// Wintun.send_data(sessionHandle,buffer);
 
 ```
 

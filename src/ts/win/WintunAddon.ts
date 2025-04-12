@@ -4,24 +4,24 @@ import * as os from 'os';
 
 export interface WintunAddonTypes {
     /**
-     * 初始化wintun 并返回 wintun句柄
+     * 初始化wintun
      */
-    wintunInit: () => number;
+    init: () => number;
 
     /**
-     * 设置Ip并返回适配器
+     * 设置Ip
      * @param name 适配器名字
      * @param ip ip
      * @param mask ip的掩码
      */
-    wintunSetIpv4: (name: string,ip:string,mask:number) => number;
+    set_ipv4: (name: string,ip:string,mask:number) => number;
 
     /**
      *  开始，并监适配器ip包数据，并返回线程句柄
      * @param sessionHandle
      * @param handler
      */
-    wintunUpOn: (handler:(data:Buffer)=>void) => number;
+    on_data: (handler:(data:Buffer)=>void) => number;
 
     /**
      * 关闭所有句柄
@@ -30,20 +30,20 @@ export interface WintunAddonTypes {
      * @param Session
      * @param Wintun
      */
-    wintunClose: () => number;
+    close: () => number;
 
     /**
      * 发送数据到网卡session
      * @param Session
      * @param data
      */
-    wintunSend: (data:Buffer) => number;
+    send_data: (data:Buffer) => number;
 
     /**
      * 设置dll路径
      * @param dllPath
      */
-    wintunSetPath(dllPath:string) : void;
+    set_dll_path(dllPath:string) : void;
 
     /**
      * 获取dll的路径
