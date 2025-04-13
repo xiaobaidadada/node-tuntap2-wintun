@@ -21,7 +21,7 @@ function get_wintun_dll_path() {
     const winfilename = `wintun${cpuArch ? `-${cpuArch}` : ''}.dll`;
     return path.join(__dirname, "../../../../wintun_dll", winfilename);
 }
-const WintunAddon = os.platform() === 'win32' ? require("../../../../build/Debug/tuntap2Addon") : undefined;
+const WintunAddon = os.platform() === 'win32' ? require("../../../../build/Release/tuntap2Addon") : undefined;
 if (WintunAddon) {
     WintunAddon.get_wintun_dll_path = get_wintun_dll_path;
 }
