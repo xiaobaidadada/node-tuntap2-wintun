@@ -30,11 +30,14 @@ void initAnGetWintun(void)
 }
 
 // 创建适配器(网卡)
-void createAdapter(const wchar_t* name)
+int createAdapter(const wchar_t* name)
 {
     // GUID ExampleGuid = {0xdeadbabe, 0xcafe, 0xbeef, {0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef}};
     // 参数为 名称 描述 唯一id(为空自动生成
+    WINTUN_ADAPTER_HANDLE adapter = WintunOpenAdapter(name);
+    if(adapter != NULL) return -1;
     Adapter = WintunCreateAdapter(name, name, NULL);
+    return (Adapter != NULL) ? 0 : -2;
 }
 
 

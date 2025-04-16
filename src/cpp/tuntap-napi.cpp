@@ -71,7 +71,10 @@ static Napi::Value node_set_ipv4(const Napi::CallbackInfo& info) {
     std::string name = info[0].As<Napi::String>().ToString();
     std::string ip = info[1].As<Napi::String>().ToString();
     int mask = info[2].As<Napi::Number>().Int32Value();
-    createAdapter(charToWchar(name.c_str()));
+    if(createAdapter(charToWchar(name.c_str())) == -1) {
+         Napi::Error::New(env, "exists").ThrowAsJavaScriptException();
+                return env.Null();
+    }
     setIpv4AddrMask(ip.c_str(),mask);
     return  Napi::Number::From(env,1);
 }
