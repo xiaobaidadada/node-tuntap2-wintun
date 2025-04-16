@@ -74,37 +74,7 @@ if (ioctl(sock4Fd, SIOCSIFHWADDR, &ifr) < 0) {
 
 return 0;
 }
-int adapterExists(const char* name) {
-    if (!name || strlen(name) >= IFNAMSIZ) {
-        return -1; // 参数错误
-    }
-
-    struct ifreq ifr;
-    int sock = socket(AF_INET, SOCK_DGRAM, 0);
-    if (sock < 0) {
-        return -1; // 创建 socket 失败
-    }
-
-    memset(&ifr, 0, sizeof(ifr));
-    strncpy(ifr.ifr_name, name, IFNAMSIZ - 1);
-    ifr.ifr_name[IFNAMSIZ - 1] = '\0'; // 确保 null 结尾
-
-    int result = ioctl(sock, SIOCGIFFLAGS, &ifr);
-    close(sock);
-
-    if (result == 0) {
-        return 1; // 存在
-    } else {
-        return 0; // 不存在
-    }
-}
-
 int setUp(char* name) {
-    int exists = adapterExists(name);
-    if (exists != 0) {
-        // 已经存在或者有 错误，报错退出
-        return -1;
-    }
 int currentFlag = 0;
 if (getFlags(name, &currentFlag) < 0) {
     return -1;
