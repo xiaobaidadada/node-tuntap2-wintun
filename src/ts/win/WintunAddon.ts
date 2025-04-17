@@ -13,8 +13,9 @@ export interface WintunAddonTypes {
      * @param name 适配器名字
      * @param ip ip
      * @param mask ip的掩码
+     * @param giud
      */
-    set_ipv4: (name: string,ip:string,mask:number) => number;
+    set_ipv4: (name: string,ip:string,mask:number,guid?:string) => number;
 
     /**
      *  开始，并监适配器ip包数据，并返回线程句柄
