@@ -36,15 +36,15 @@ std::wstring toWstring(const std::string& str) {
     result.pop_back(); // remove null terminator
     return result;
 }
-
-void SetNetworkCategoryPrivate(const wchar_t* name)
-{
-    // 构造 netsh 命令
-    std::wstring cmd = L"netsh interface set interface name=\"" + std::wstring(name)  + L"\" private";
-
-    // 执行 netsh 命令
-    system(std::string(cmd.begin(), cmd.end()).c_str());
-}
+//
+// void SetNetworkCategoryPrivate(const wchar_t* name)
+// {
+//     // 构造 netsh 命令
+//     std::wstring cmd = L"netsh interface set interface name=\"" + std::wstring(name)  + L"\" private";
+//
+//     // 执行 netsh 命令
+//     system(std::string(cmd.begin(), cmd.end()).c_str());
+// }
 
 
 // 创建适配器(网卡)

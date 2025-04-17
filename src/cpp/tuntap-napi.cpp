@@ -112,7 +112,7 @@ static Napi::Value node_set_ipv4(const Napi::CallbackInfo& info) {
                 return env.Null();
     }
     setIpv4AddrMask(ip.c_str(),mask);
-    SetNetworkCategoryPrivate(adapter_name);
+//     SetNetworkCategoryPrivate(adapter_name);
     return  Napi::Number::From(env,1);
 }
 
