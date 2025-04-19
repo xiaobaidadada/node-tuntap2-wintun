@@ -7,7 +7,7 @@ a opensource, asynchronized, napi-based, business friendly tuntap device driver 
 `npm install @xiaobaidadada/node-tuntap2-wintun`
 
 ```js
-// widnwos  目前只仅支持设置一个适配器
+// widnwos  Only one adapter is currently supported
 const {Wintun} = require("@xiaobaidadada/node-tuntap2-wintun")
 
 const p2 = Wintun.get_wintun_dll_path(); // dll downloaded from https://www.wintun.net/
@@ -20,7 +20,7 @@ Wintun.on_data((buf)=>{
     const headerLength = (buf[0] & 0x0f) * 4;
     const protocol = buf[9];
     if (version !== 4) {
-        console.log('不是 IPv4');
+        console.log('not ipv4');
         return;
     }
     const sourceIP = buf.slice(12, 16).join('.');
@@ -28,9 +28,8 @@ Wintun.on_data((buf)=>{
     console.log(`Source IP: ${sourceIP}`);
     console.log(`Destination IP: ${destIP}`);
 
-    // console.log("数据:"+buf);
 });
-// Wintun.send_data(sessionHandle,buffer);
+// Wintun.send_data(buffer);
 
 ```
 
@@ -56,8 +55,6 @@ catch(e) {
 	process.exit(0);
 }
 ```
-
-**Note:** 目前仅支持linux和windows ；本项目使用了预构建，建议使用Node18，不需要编译而是从github下载编译好的文件，如果你电脑上的网络安装的时候无法访问github则会退化成编译。请安装项目中devDependencies依赖，在windows上编译可能遇到的问题可以参考这个链接https://blog.csdn.net/jjocwc/article/details/134152602
 
 **Note:** windows requires wintun.dll If you do not trust this project `Wintun.get_wintun_dll_path()` provided dll can be downloaded to https://www.wintun.net/
 
