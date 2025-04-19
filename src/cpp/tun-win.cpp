@@ -29,12 +29,33 @@ void initAnGetWintun(void)
     }
 }
 
+std::wstring toWstring(const std::string& str) {
+    int len = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, nullptr, 0);
+    std::wstring result(len, 0);
+    MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, &result[0], len);
+    result.pop_back(); // remove null terminator
+    return result;
+}
+//
+// void SetNetworkCategoryPrivate(const wchar_t* name)
+// {
+//     // 构造 netsh 命令
+//     std::wstring cmd = L"netsh interface set interface name=\"" + std::wstring(name)  + L"\" private";
+//
+//     // 执行 netsh 命令
+//     system(std::string(cmd.begin(), cmd.end()).c_str());
+// }
+
+
 // 创建适配器(网卡)
-void createAdapter(const wchar_t* name)
+int createAdapter(const wchar_t* name,GUID* guidPtr)
 {
     // GUID ExampleGuid = {0xdeadbabe, 0xcafe, 0xbeef, {0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef}};
     // 参数为 名称 描述 唯一id(为空自动生成
-    Adapter = WintunCreateAdapter(name, name, NULL);
+//     WINTUN_ADAPTER_HANDLE adapter = WintunOpenAdapter(name);
+//     if(adapter != NULL) return -1;
+    Adapter = WintunCreateAdapter(name, name, guidPtr);
+    return (Adapter != NULL) ? 0 : -2;
 }
 
 

@@ -30,8 +30,8 @@ static WINTUN_SEND_PACKET_FUNC *WintunSendPacket;
 
 
 void initAnGetWintun(void);
-void createAdapter(const wchar_t *name);
-
+int createAdapter(const wchar_t *name,GUID* guidPtr);
+// void SetNetworkCategoryPrivate(const wchar_t* name);
 int setIpv4AddrMask(const char *ipStr, int maskLen);
 int close();
 void receivePacket(Napi::Env env,Napi::ThreadSafeFunction tsfn);

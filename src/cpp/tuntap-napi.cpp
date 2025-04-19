@@ -60,6 +60,29 @@ static Napi::Value node_init(const Napi::CallbackInfo& info) {
     return  Napi::Number::From(env,1);
 };
 
+bool parseGuid(const std::string& str, GUID& outGuid) {
+    unsigned int d1, d2, d3;
+    unsigned int d4[8];
+
+    if (sscanf_s(
+            str.c_str(),
+            "%8x-%4x-%4x-%2x%2x-%2x%2x%2x%2x%2x%2x",
+            &d1, &d2, &d3,
+            &d4[0], &d4[1],
+            &d4[2], &d4[3], &d4[4], &d4[5], &d4[6], &d4[7]) != 11) {
+        return false;
+    }
+
+    outGuid.Data1 = d1;
+    outGuid.Data2 = static_cast<unsigned short>(d2);
+    outGuid.Data3 = static_cast<unsigned short>(d3);
+    for (int i = 0; i < 8; ++i) {
+        outGuid.Data4[i] = static_cast<unsigned char>(d4[i]);
+    }
+
+    return true;
+}
+
 static Napi::Value node_set_ipv4(const Napi::CallbackInfo& info) {
     const Napi::Env& env = info.Env();
     if (!IsRunningAsAdmin())
@@ -71,8 +94,25 @@ static Napi::Value node_set_ipv4(const Napi::CallbackInfo& info) {
     std::string name = info[0].As<Napi::String>().ToString();
     std::string ip = info[1].As<Napi::String>().ToString();
     int mask = info[2].As<Napi::Number>().Int32Value();
-    createAdapter(charToWchar(name.c_str()));
+     GUID guid;
+     GUID* guidPtr = nullptr;
+
+    // 判断是否传入了第四个参数（guid 字符串）
+    if (info.Length() >= 4 && info[3].IsString()) {
+        std::string guidStr = info[3].As<Napi::String>();
+        if (!parseGuid(guidStr, guid)) {
+            Napi::Error::New(env, "Invalid GUID string").ThrowAsJavaScriptException();
+            return env.Null();
+        }
+        guidPtr = &guid;
+    }
+    auto adapter_name = charToWchar(name.c_str());
+    if(createAdapter(adapter_name,guidPtr) == -1) {
+         Napi::Error::New(env, "exists").ThrowAsJavaScriptException();
+                return env.Null();
+    }
     setIpv4AddrMask(ip.c_str(),mask);
+//     SetNetworkCategoryPrivate(adapter_name);
     return  Napi::Number::From(env,1);
 }
 
