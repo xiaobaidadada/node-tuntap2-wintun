@@ -85,23 +85,32 @@ int close()
 
 void receivePacket(Napi::Env env, Napi::ThreadSafeFunction tsfn) {
     auto session = Session;
-    std::thread([session, tsfn]() {
+    HANDLE waitEvent = WintunGetReadWaitEvent(session);
+
+    std::thread([session, tsfn, waitEvent]() {
         while (th_doing == 1) {
-            DWORD PacketSize;
-            BYTE *Packet = WintunReceivePacket(session, &PacketSize);
-            if (Packet) {
-                std::vector<byte> data(Packet, Packet + PacketSize); // 复制数据，避免指针失效
-                tsfn.BlockingCall([data = std::move(data)](Napi::Env env, Napi::Function jsCallback) {
-                    Napi::HandleScope scope(env);
-                    auto buffer = Napi::Buffer<byte>::Copy(env, data.data(), data.size());
-                    jsCallback.Call({ buffer });
-                });
-                WintunReleaseReceivePacket(session, Packet);
+            DWORD waitResult = WaitForSingleObject(waitEvent, INFINITE);
+            if (waitResult == WAIT_OBJECT_0) {
+                DWORD PacketSize;
+                BYTE *Packet;
+                while ((Packet = WintunReceivePacket(session, &PacketSize)) != NULL) {
+                    std::vector<byte> data(Packet, Packet + PacketSize); // 复制数据
+                    tsfn.BlockingCall([data = std::move(data)](Napi::Env env, Napi::Function jsCallback) {
+                        Napi::HandleScope scope(env);
+                        auto buffer = Napi::Buffer<byte>::Copy(env, data.data(), data.size());
+                        jsCallback.Call({ buffer });
+                    });
+                    WintunReleaseReceivePacket(session, Packet);
+                }
+            } else {
+                // 你可以添加错误处理逻辑
+                break;
             }
         }
         tsfn.Release(); // 确保释放 ThreadSafeFunction
     }).detach();
 }
+
 
 
 void send_data(byte* data, size_t buffer_len)
