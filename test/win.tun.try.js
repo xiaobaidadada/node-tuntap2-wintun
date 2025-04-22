@@ -22,18 +22,19 @@ Wintun.on_data((buf)=>{
     console.log(`Destination IP: ${destIP}`);
 
     // console.log("数据:"+buf);
+    // Wintun.close();
 });
-function getTransBuffer(vir_ip, data) {
-    const ipBuf = Buffer.from(vir_ip, 'utf8');
-    if (ipBuf.length > 255) throw new Error('vir_ip too long');
-    return Buffer.concat([
-        Buffer.from([ipBuf.length]), // 1字节长度
-        ipBuf,                       // IP字符串
-        data                         // 实际 payload
-    ]);
-}
-
-// 👇 构造心跳 buffer
-const payload = Buffer.from('PING'); // 心跳内容
-const pingBuffer = getTransBuffer('10.1.1.3', payload);
-Wintun.send_data(pingBuffer);
+// function getTransBuffer(vir_ip, data) {
+//     const ipBuf = Buffer.from(vir_ip, 'utf8');
+//     if (ipBuf.length > 255) throw new Error('vir_ip too long');
+//     return Buffer.concat([
+//         Buffer.from([ipBuf.length]), // 1字节长度
+//         ipBuf,                       // IP字符串
+//         data                         // 实际 payload
+//     ]);
+// }
+//
+// // 👇 构造心跳 buffer
+// const payload = Buffer.from('PING'); // 心跳内容
+// const pingBuffer = getTransBuffer('10.1.1.3', payload);
+// Wintun.send_data(pingBuffer);

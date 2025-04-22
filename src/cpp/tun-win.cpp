@@ -11,7 +11,7 @@ HMODULE Wintun;
 
 void initAnGetWintun(void)
 {
-    HMODULE Wintun =
+    Wintun =
         LoadLibraryExW(wintunn_path, NULL,
                        LOAD_LIBRARY_SEARCH_APPLICATION_DIR | LOAD_LIBRARY_SEARCH_SYSTEM32);
     if (!Wintun)
@@ -128,6 +128,7 @@ void receivePacket(Napi::Env env, Napi::ThreadSafeFunction tsfn) {
                 break;
             }
         }
+        close();
         tsfn.Release(); // 确保释放 ThreadSafeFunction
     }).detach();
 }

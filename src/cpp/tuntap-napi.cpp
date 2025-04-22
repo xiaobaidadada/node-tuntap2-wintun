@@ -139,7 +139,7 @@ static Napi::Value node_on_data(const Napi::CallbackInfo& info) {
 static  Napi::Value node_close(const Napi::CallbackInfo& info) {
     const Napi::Env& env = info.Env();
     th_doing = 0;
-    close();
+//     close();
     return  Napi::Number::From(env,1);
 }
 // 发送数据到网卡
