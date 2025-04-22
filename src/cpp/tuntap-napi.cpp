@@ -49,14 +49,14 @@ bool IsRunningAsAdmin() {
     return isAdmin == TRUE;
 }
 
-int init_do = 0;
+// int init_do = 0;
 static Napi::Value node_init(const Napi::CallbackInfo& info) {
     const Napi::Env& env = info.Env();
-    if(init_do == 0)
-    {
+    // if(init_do == 0)
+    // {
         initAnGetWintun(); 
-    }
-    init_do = 1;
+    // }
+    // init_do = 1;
     return  Napi::Number::From(env,1);
 };
 
@@ -141,7 +141,7 @@ static Napi::Value node_on_data(const Napi::CallbackInfo& info) {
 static  Napi::Value node_close(const Napi::CallbackInfo& info) {
     const Napi::Env& env = info.Env();
     th_doing = 0;
-//     close();
+    close();
     return  Napi::Number::From(env,1);
 }
 // 发送数据到网卡

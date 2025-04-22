@@ -5,6 +5,8 @@
 
 extern wchar_t* wintunn_path;
 extern int th_doing;
+std::thread recvThread;
+
 WINTUN_ADAPTER_HANDLE Adapter; // 适配器
 WINTUN_SESSION_HANDLE Session; // 会话
 HMODULE Wintun;
@@ -52,8 +54,8 @@ int createAdapter(const wchar_t* name,GUID* guidPtr)
 {
     // GUID ExampleGuid = {0xdeadbabe, 0xcafe, 0xbeef, {0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef}};
     // 参数为 名称 描述 唯一id(为空自动生成
-//     WINTUN_ADAPTER_HANDLE adapter = WintunOpenAdapter(name);
-//     if(adapter != NULL) return -1;
+     Adapter = WintunOpenAdapter(name);
+     if(Adapter != NULL) return 0;
     Adapter = WintunCreateAdapter(name, name, guidPtr);
     return (Adapter != NULL) ? 0 : -2;
 }
@@ -96,6 +98,19 @@ int setIpv4AddrMask(const char* ipStr, int maskLen)
 
 int close()
 {
+
+    // 2. 唤醒等待的线程（如果它卡在 WaitForSingleObject）
+    if (Session) {
+        HANDLE waitEvent = WintunGetReadWaitEvent(Session);
+        SetEvent(waitEvent); // 唤醒 WintunReceivePacket 的等待
+    }
+
+    // 3. 等待线程安全退出
+    if (recvThread.joinable()) {
+        recvThread.join();
+    }
+
+    // 4. 安全清理资源
     if (Session) {
         WintunEndSession(Session);
         Session = NULL;
@@ -119,14 +134,14 @@ void receivePacket(Napi::Env env, Napi::ThreadSafeFunction tsfn) {
     auto session = Session;
     HANDLE waitEvent = WintunGetReadWaitEvent(session);
 
-    std::thread([session, tsfn, waitEvent]() {
+    recvThread = std::thread([session, tsfn, waitEvent]() {
         while (th_doing == 1) {
             DWORD waitResult = WaitForSingleObject(waitEvent, INFINITE);
             if (waitResult == WAIT_OBJECT_0) {
                 DWORD PacketSize;
                 BYTE *Packet;
                 while ((Packet = WintunReceivePacket(session, &PacketSize)) != NULL) {
-                    std::vector<byte> data(Packet, Packet + PacketSize); // 复制数据
+                    std::vector<byte> data(Packet, Packet + PacketSize);
                     tsfn.BlockingCall([data = std::move(data)](Napi::Env env, Napi::Function jsCallback) {
                         Napi::HandleScope scope(env);
                         auto buffer = Napi::Buffer<byte>::Copy(env, data.data(), data.size());
@@ -135,13 +150,11 @@ void receivePacket(Napi::Env env, Napi::ThreadSafeFunction tsfn) {
                     WintunReleaseReceivePacket(session, Packet);
                 }
             } else {
-                // 你可以添加错误处理逻辑
                 break;
             }
         }
-        close();
-        tsfn.Release(); // 确保释放 ThreadSafeFunction
-    }).detach();
+        tsfn.Release();
+    });
 }
 
 

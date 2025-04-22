@@ -22,12 +22,10 @@ function run() {
         console.log(`Destination IP: ${destIP}`);
 
         // console.log("数据:"+buf);
-        setTimeout(()=>{
-            // 暂时 不能立即关闭  要等待子线程结束
-            Wintun.close();
-            run();
-        },3000)
-
+        // Wintun.close();
+        // setTimeout(()=>{
+        //     run();
+        // },1000)
     });
 }
 run();
