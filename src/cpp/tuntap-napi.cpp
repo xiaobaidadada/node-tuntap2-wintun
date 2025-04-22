@@ -107,12 +107,14 @@ static Napi::Value node_set_ipv4(const Napi::CallbackInfo& info) {
         guidPtr = &guid;
     }
     auto adapter_name = charToWchar(name.c_str());
-    if(createAdapter(adapter_name,guidPtr) == -1) {
-         Napi::Error::New(env, "exists").ThrowAsJavaScriptException();
+    if(createAdapter(adapter_name,guidPtr) != 0) {
+         Napi::Error::New(env, "error").ThrowAsJavaScriptException();
                 return env.Null();
     }
-    setIpv4AddrMask(ip.c_str(),mask);
-//     SetNetworkCategoryPrivate(adapter_name);
+    if(setIpv4AddrMask(ip.c_str(),mask) != 0) {
+        Napi::Error::New(env, "error").ThrowAsJavaScriptException();
+        return env.Null();
+    }
     return  Napi::Number::From(env,1);
 }
 

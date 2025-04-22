@@ -96,13 +96,24 @@ int setIpv4AddrMask(const char* ipStr, int maskLen)
 
 int close()
 {
-    // 使用平台特定的函数终止线程，这里是 Windows 示例
-    //    TerminateThread(threadHandle, 0);
-    WintunEndSession(Session);
-    WintunCloseAdapter(Adapter);
-    FreeLibrary(Wintun);
+    if (Session) {
+        WintunEndSession(Session);
+        Session = NULL;
+    }
+
+    if (Adapter) {
+        WintunCloseAdapter(Adapter);
+        Adapter = NULL;
+    }
+
+    if (Wintun) {
+        FreeLibrary(Wintun);
+        Wintun = NULL;
+    }
+
     return 0;
 }
+
 
 void receivePacket(Napi::Env env, Napi::ThreadSafeFunction tsfn) {
     auto session = Session;

@@ -1,29 +1,37 @@
 const {Wintun} = require("../dist")
 const {join} = require("node:path");
 
+function run() {
+    const p = join(__dirname,"..","wintun.dll");
+    const p2 = Wintun.get_wintun_dll_path();
+    Wintun.set_dll_path(p2);
+    Wintun.init();
+    Wintun.set_ipv4("filecat","10.6.7.7",24);
+    Wintun.on_data((buf)=>{
+        // 解析 IP 头部
+        const version = buf[0] >> 4;
+        const headerLength = (buf[0] & 0x0f) * 4;
+        const protocol = buf[9];
+        if (version !== 4) {
+            // console.log('不是 IPv4');
+            return;
+        }
+        const sourceIP = buf.slice(12, 16).join('.');
+        const destIP = buf.slice(16, 20).join('.');
+        console.log(`Source IP: ${sourceIP}`);
+        console.log(`Destination IP: ${destIP}`);
 
-const p = join(__dirname,"..","wintun.dll");
-const p2 = Wintun.get_wintun_dll_path();
-Wintun.set_dll_path(p2);
-Wintun.init();
-Wintun.set_ipv4("filecat","10.6.7.7",24);
-Wintun.on_data((buf)=>{
-    // 解析 IP 头部
-    const version = buf[0] >> 4;
-    const headerLength = (buf[0] & 0x0f) * 4;
-    const protocol = buf[9];
-    if (version !== 4) {
-        // console.log('不是 IPv4');
-        return;
-    }
-    const sourceIP = buf.slice(12, 16).join('.');
-    const destIP = buf.slice(16, 20).join('.');
-    console.log(`Source IP: ${sourceIP}`);
-    console.log(`Destination IP: ${destIP}`);
+        // console.log("数据:"+buf);
+        setTimeout(()=>{
+            // 暂时 不能立即关闭  要等待子线程结束
+            Wintun.close();
+            run();
+        },3000)
 
-    // console.log("数据:"+buf);
-    // Wintun.close();
-});
+    });
+}
+run();
+
 // function getTransBuffer(vir_ip, data) {
 //     const ipBuf = Buffer.from(vir_ip, 'utf8');
 //     if (ipBuf.length > 255) throw new Error('vir_ip too long');
