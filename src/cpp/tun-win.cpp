@@ -54,8 +54,8 @@ int createAdapter(const wchar_t* name,GUID* guidPtr)
 {
     // GUID ExampleGuid = {0xdeadbabe, 0xcafe, 0xbeef, {0x01, 0x23, 0x45, 0x67, 0x89, 0xab, 0xcd, 0xef}};
     // 参数为 名称 描述 唯一id(为空自动生成
-     Adapter = WintunOpenAdapter(name);
-     if(Adapter != NULL) return 0;
+//      Adapter = WintunOpenAdapter(name);
+//      if(Adapter != NULL) return 0;
     Adapter = WintunCreateAdapter(name, name, guidPtr);
     return (Adapter != NULL) ? 0 : -2;
 }
