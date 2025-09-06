@@ -54,7 +54,7 @@ static Napi::Value node_init(const Napi::CallbackInfo& info) {
     const Napi::Env& env = info.Env();
     // if(init_do == 0)
     // {
-        initAnGetWintun(); 
+        initAnGetWintun();
     // }
     // init_do = 1;
     return  Napi::Number::From(env,1);
@@ -89,7 +89,7 @@ static Napi::Value node_set_ipv4(const Napi::CallbackInfo& info) {
     {
         // 不是管理员
         Napi::Error::New(env, "not admin ").ThrowAsJavaScriptException();
-        return env.Null(); 
+        return env.Null();
     }
     std::string name = info[0].As<Napi::String>().ToString();
     std::string ip = info[1].As<Napi::String>().ToString();
@@ -168,8 +168,10 @@ static Napi::Object Init(Napi::Env env, Napi::Object exports) {
 }
 
 NODE_API_MODULE(tuntap2Addon, Init)
-// Windows 特定代码
-#else
+#endif
+
+
+#ifdef __linux__
 
 static Napi::Value tuntapInit(const Napi::CallbackInfo& info) {
     const Napi::Env& env = info.Env();

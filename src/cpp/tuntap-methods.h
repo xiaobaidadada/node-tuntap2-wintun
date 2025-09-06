@@ -36,8 +36,10 @@ int setIpv4AddrMask(const char *ipStr, int maskLen);
 int close();
 void receivePacket(Napi::Env env,Napi::ThreadSafeFunction tsfn);
 void send_data(byte * data,size_t data_len);
+#endif
 
-#else
+#ifdef __linux__
+
 #include <netinet/ether.h>
 #include <netinet/if_ether.h>
 // linux 的api部分

@@ -4,14 +4,21 @@
      "target_name": "tuntap2Addon",
            "sources": [
              "src/cpp/tuntap-napi.cpp",
-             "src/cpp/tuntap-linux.cpp",
-             "src/cpp/tun-win.cpp",
-             "src/cpp/wintun.h",
-             "src/cpp/tuntap-methods.h"
+             "src/cpp/tun-win.cpp"
            ],
-     'includes': [
+          'includes': [
             './common.gypi'
-          ]
+          ],
+          'conditions': [
+              ['OS=="mac"', {
+
+              }],
+              ['OS=="linux"', {
+                        "sources": [
+                             "src/cpp/tuntap-linux.cpp",
+                           ],
+              }]
+            ]
     },
   ]
 }

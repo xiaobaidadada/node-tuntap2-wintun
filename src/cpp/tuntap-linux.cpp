@@ -2,12 +2,6 @@
 #include <fcntl.h>
 #include <string.h>
 
-
-#ifdef _WIN32
-// Windows 特定代码
-
-
-#elif defined(__linux__)
 #include <sys/ioctl.h>
 #include <arpa/inet.h>
 #include <linux/if.h>
@@ -251,8 +245,6 @@ if (ioctl(sock6Fd, SIOCSIFADDR, &ifrv6) == -1) {
 (void)close(sock6Fd);
 return 0;
 }
-#endif
-
 
 
 
