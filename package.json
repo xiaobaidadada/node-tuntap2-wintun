@@ -8,7 +8,8 @@
     "install": "prebuild-install --verbose || npm run build",
     "build": "npm install node-addon-api node-gyp --save-dev && node-gyp rebuild --release",
     "install_build": "npm run build  && npx tsc --build ",
-    "build-dev": "node-gyp rebuild --debug"
+    "build-dev": "node-gyp rebuild --debug",
+    "build-release": "node-gyp rebuild --release"
   },
   "author": {
     "name": "xiaobaidadada"
@@ -27,17 +28,17 @@
     "wintun",
     "linux",
     "windows",
-    "win"
+    "win",
+    "mac"
   ],
   "dependencies": {
-    "bindings": "^1.5.0",
     "jmespath": "^0.16.0",
-    "prebuild-install": "^7.1.2"
+    "prebuild-install": "^7.1.2",
+    "node-addon-api": "^7.1.1"
   },
   "devDependencies": {
     "@types/jmespath": "^0.15.0",
     "@types/node": "^17.0.8",
-    "node-addon-api": "^7.1.1",
     "node-gyp": "^10.3.1",
     "prebuild": "^13.0.1",
     "ts-node": "^10.9.2",

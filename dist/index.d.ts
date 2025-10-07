@@ -1,4 +1,5 @@
 import { Tuntap } from './src/ts/linux/Tuntap';
+import MacTunAddon from "./src/ts/mac/MacTun";
 /**
  * Tun interface, a Layer 2 virtual interface.
  * @class LinuxTun
@@ -25,4 +26,4 @@ declare class LinuxTap extends Tuntap {
 }
 declare const LinuxTunTap: (options: any) => Tuntap;
 declare const Wintun: import("./src/ts/win/WintunAddon").WintunAddonTypes;
-export { LinuxTap, LinuxTun, LinuxTunTap, Wintun };
+export { LinuxTap, LinuxTun, LinuxTunTap, Wintun, MacTunAddon };
