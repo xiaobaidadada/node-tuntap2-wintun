@@ -9,6 +9,7 @@ export interface MaskRule {
 export interface MacTunTypes {
     createTun(): { fd: number; name: string };
     setIPv4(ip: string, peer: string): number;
+    onIPv4(buf:Buffer): void;
     closeTun(): number;
     applyGlobalMask(rule: MaskRule, tunName: string): void;
     removeGlobalMask(rule: MaskRule, tunName: string): void;
@@ -31,7 +32,7 @@ function applyGlobalMask(rule: MaskRule, tunName: string) {
     // 添加路由，让指定 mask 流量走 TUN
     execSync(`sudo route add -net ${rule.subnet} -interface ${tunName}`);
 
-    console.log(`[Global TUN] Route ${rule.subnet} via ${tunName} applied`);
+    // console.log(`[Global TUN] Route ${rule.subnet} via ${tunName} applied`);
 }
 
 // === 删除 mask 路由 ===
@@ -40,7 +41,7 @@ function removeGlobalMask(rule: MaskRule, tunName: string) {
 
     try {
         execSync(`sudo route delete -net ${rule.subnet} -interface ${tunName}`);
-        console.log(`[Global TUN] Route ${rule.subnet} via ${tunName} removed`);
+        // console.log(`[Global TUN] Route ${rule.subnet} via ${tunName} removed`);
     } catch {}
 }
 
