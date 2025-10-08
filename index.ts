@@ -83,5 +83,5 @@ const LinuxTunTap = function (options: any) {
 }
 
 const Wintun = WintunAddon;
-
-export {LinuxTap, LinuxTun, LinuxTunTap, Wintun, MacTunAddon};
+const MacTun = MacTunAddon;
+export {LinuxTap, LinuxTun, LinuxTunTap, Wintun, MacTun};

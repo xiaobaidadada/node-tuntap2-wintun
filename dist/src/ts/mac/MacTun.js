@@ -18,7 +18,7 @@ function applyGlobalMask(rule, tunName) {
     catch (_a) { }
     // 添加路由，让指定 mask 流量走 TUN
     (0, node_child_process_1.execSync)(`sudo route add -net ${rule.subnet} -interface ${tunName}`);
-    console.log(`[Global TUN] Route ${rule.subnet} via ${tunName} applied`);
+    // console.log(`[Global TUN] Route ${rule.subnet} via ${tunName} applied`);
 }
 // === 删除 mask 路由 ===
 function removeGlobalMask(rule, tunName) {
@@ -26,7 +26,7 @@ function removeGlobalMask(rule, tunName) {
         return;
     try {
         (0, node_child_process_1.execSync)(`sudo route delete -net ${rule.subnet} -interface ${tunName}`);
-        console.log(`[Global TUN] Route ${rule.subnet} via ${tunName} removed`);
+        // console.log(`[Global TUN] Route ${rule.subnet} via ${tunName} removed`);
     }
     catch (_a) { }
 }

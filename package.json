@@ -1,6 +1,6 @@
 {
   "name": "@xiaobaidadada/node-tuntap2-wintun",
-  "version": "2.1.1",
+  "version": "3.0.0",
   "description": " create tun in linux or windows ",
   "main": "./dist/index.js",
   "types": "./dist/src/index.d.ts",
@@ -33,12 +33,12 @@
   ],
   "dependencies": {
     "jmespath": "^0.16.0",
-    "prebuild-install": "^7.1.2",
-    "node-addon-api": "^7.1.1"
+    "prebuild-install": "^7.1.2"
   },
   "devDependencies": {
     "@types/jmespath": "^0.15.0",
     "@types/node": "^17.0.8",
+    "node-addon-api": "^8.5.0",
     "node-gyp": "^10.3.1",
     "prebuild": "^13.0.1",
     "ts-node": "^10.9.2",

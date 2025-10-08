@@ -1,10 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.MacTunAddon = exports.Wintun = exports.LinuxTunTap = exports.LinuxTun = exports.LinuxTap = void 0;
+exports.MacTun = exports.Wintun = exports.LinuxTunTap = exports.LinuxTun = exports.LinuxTap = void 0;
 const Tuntap_1 = require("./src/ts/linux/Tuntap");
 const WintunAddon_1 = require("./src/ts/win/WintunAddon");
 const MacTun_1 = require("./src/ts/mac/MacTun");
-exports.MacTunAddon = MacTun_1.default;
 // this file only contains wrapper class for tuntap class.
 /**
  * Tun interface, a Layer 2 virtual interface.
@@ -85,4 +84,6 @@ const LinuxTunTap = function (options) {
 exports.LinuxTunTap = LinuxTunTap;
 const Wintun = WintunAddon_1.default;
 exports.Wintun = Wintun;
+const MacTun = MacTun_1.default;
+exports.MacTun = MacTun;
 //# sourceMappingURL=index.js.map

@@ -1,20 +1,21 @@
-const { MacTunAddon } = require("../dist");
+const { MacTun } = require("../dist");
 const fs = require("node:fs");
 
 // 创建 TUN
-const { fd, name } = MacTunAddon.createTun();
+const { fd, name } = MacTun.createTun();
 console.log('TUN fd:', fd, 'name:', name);
 
 // 设置虚拟 IP
-MacTunAddon.setIPv4('10.0.0.1', '10.0.0.1');
+MacTun.setIPv4('10.0.0.1', '10.0.0.1');
 
 // 配置全局路由 / mask
-MacTunAddon.applyGlobalMask({ subnet: "192.168.100.0/24" }, name);
+MacTun.applyGlobalMask({ subnet: "192.168.100.0/24" }, name);
 
 console.log('TUN interface ready, listening stream...');
 
 // === 用 fs.createReadStream 包装 ===
 const tunStream = fs.createReadStream(null, { fd, highWaterMark: 4096 });
+const tunWriteStream = fs.createWriteStream(null, { fd });
 
 // === 数据事件监听 ===
 tunStream.on('data', (buf) => {
@@ -43,8 +44,8 @@ tunStream.on('error', (err) => {
 function cleanup() {
     console.log('Stopping TUN...');
     try {
-        MacTunAddon.removeGlobalMask({ subnet: "192.168.100.0/24" }, name);
-        MacTunAddon.closeTun();
+        MacTun.removeGlobalMask({ subnet: "192.168.100.0/24" }, name);
+        MacTun.closeTun();
         tunStream.destroy()
     } catch (e) {
         console.error('Error during cleanup:', e);
