@@ -1,12 +1,12 @@
 {
   "name": "@xiaobaidadada/node-tuntap2-wintun",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": " create tun in linux or windows ",
   "main": "./dist/index.js",
   "types": "./dist/src/index.d.ts",
   "scripts": {
     "install": "prebuild-install --verbose || npm run build",
-    "build": "npm install node-addon-api node-gyp --save-dev && node-gyp rebuild --release",
+    "build": "node-gyp rebuild --release",
     "install_build": "npm run build  && npx tsc --build ",
     "build-dev": "node-gyp rebuild --debug",
     "build-release": "node-gyp rebuild --release"
@@ -35,7 +35,7 @@
     "jmespath": "^0.16.0",
     "prebuild-install": "^7.1.2",
     "node-addon-api": "^8.5.0",
-    "node-gyp": "^10.3.1"
+    "node-gyp": "^11.4.2"
   },
   "devDependencies": {
     "@types/jmespath": "^0.15.0",
